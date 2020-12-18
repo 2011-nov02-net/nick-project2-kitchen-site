@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  baseUrl: 'https://nick-project2-kitchen-svc.azurewebsites.net',
 };
