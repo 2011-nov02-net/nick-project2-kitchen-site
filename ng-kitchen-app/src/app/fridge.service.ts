@@ -9,19 +9,29 @@ import { environment } from 'src/environments/environment';
 })
 export class FridgeService {
   private baseUrl = `${environment.baseUrl}/api/appliances/fridge`;
-  private headers: { [n: string]: string };
 
   constructor(private http: HttpClient, private oktaAuth: OktaAuthService) {
-    const accessToken = this.oktaAuth.getAccessToken();
-    this.headers = {
-      Authorization: 'Bearer ' + accessToken,
-      Accept: 'application/json',
-    };
   }
 
   getFridgeItems(): Promise<FridgeItem[]> {
+    const accessToken = this.oktaAuth.getAccessToken();
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+      Accept: 'application/json',
+    };
     return this.http
-      .get<FridgeItem[]>(`${this.baseUrl}/contents`, { headers: this.headers })
+      .get<FridgeItem[]>(`${this.baseUrl}/contents`, { headers: headers })
+      .toPromise();
+  }
+
+  getUserInfo(): Promise<any> {
+    const accessToken = this.oktaAuth.getAccessToken();
+    const headers = {
+      Authorization: 'Bearer ' + accessToken,
+      Accept: 'application/json',
+    };
+    return this.http
+      .get<any>(`${environment.baseUrl}/api/users/test`, { headers: headers })
       .toPromise();
   }
 }

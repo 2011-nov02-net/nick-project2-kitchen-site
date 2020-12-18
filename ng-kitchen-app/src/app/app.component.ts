@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { OktaAuthService } from '@okta/okta-angular';
+import { FridgeService } from './fridge.service';
 
 @Component({
   selector: 'app-root',
@@ -9,20 +10,24 @@ import { OktaAuthService } from '@okta/okta-angular';
 export class AppComponent implements OnInit {
   isAuthenticated: boolean = false;
 
-  constructor(private oktaAuth: OktaAuthService) {
-    this.oktaAuth.$authenticationState.subscribe((isAuthenticated) => {
-      this.isAuthenticated = isAuthenticated;
-      console.log(this.isAuthenticated);
-    });
+  constructor(private oktaAuth: OktaAuthService, private fridgeService: FridgeService) {
+    this.oktaAuth.$authenticationState.subscribe((isAuthenticated) =>
+      this.updateAuthState(isAuthenticated)
+    );
   }
 
   ngOnInit(): void {
-    this.oktaAuth.isAuthenticated().then((isAuthenticated) => {
-      this.isAuthenticated = isAuthenticated;
-      if (isAuthenticated) {
-        this.oktaAuth.getUser().then(console.log);
-      }
-    });
+    this.oktaAuth.isAuthenticated().then((isAuthenticated) =>
+      this.updateAuthState(isAuthenticated)
+    );
+  }
+
+  updateAuthState(isAuthenticated: boolean) {
+    this.isAuthenticated = isAuthenticated;
+    if (isAuthenticated) {
+      this.oktaAuth.getUser().then(console.log);
+      this.fridgeService.getUserInfo().then(console.log);
+    }
   }
 
   login() {
