@@ -1,15 +1,26 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { OktaAuthService } from '@okta/okta-angular';
+import { NEVER } from 'rxjs';
 import { AppComponent } from './app.component';
+import { FridgeService } from './fridge.service';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
+    const fakeAuthService = {
+      $authenticationState: NEVER,
+      isAuthenticated(): Promise<boolean> {
+        return Promise.resolve(false);
+      },
+    };
+    const fakeFridgeService = {};
+
     await TestBed.configureTestingModule({
-      imports: [
-        RouterTestingModule
-      ],
-      declarations: [
-        AppComponent
+      imports: [RouterTestingModule],
+      declarations: [AppComponent],
+      providers: [
+        { provide: OktaAuthService, useValue: fakeAuthService },
+        { provide: FridgeService, useValue: fakeFridgeService },
       ],
     }).compileComponents();
   });

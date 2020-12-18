@@ -8,18 +8,22 @@ import { FridgeService } from './fridge.service';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-  isAuthenticated: boolean = false;
+  title = 'ng-kitchen-app';
+  isAuthenticated = false;
 
-  constructor(private oktaAuth: OktaAuthService, private fridgeService: FridgeService) {
+  constructor(
+    private oktaAuth: OktaAuthService,
+    private fridgeService: FridgeService
+  ) {
     this.oktaAuth.$authenticationState.subscribe((isAuthenticated) =>
       this.updateAuthState(isAuthenticated)
     );
   }
 
   ngOnInit(): void {
-    this.oktaAuth.isAuthenticated().then((isAuthenticated) =>
-      this.updateAuthState(isAuthenticated)
-    );
+    this.oktaAuth
+      .isAuthenticated()
+      .then((isAuthenticated) => this.updateAuthState(isAuthenticated));
   }
 
   updateAuthState(isAuthenticated: boolean) {
